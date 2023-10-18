@@ -1,0 +1,25 @@
+{
+  "name": "qelp",
+  "version": "1.0.0",
+  "description": "generate email for any website with qelp",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deeppaz/qelp.git"
+  },
+  "keywords": [
+    "otp",
+    "email",
+    "generator"
+  ],
+  "author": "deeppaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deeppaz/qelp/issues"
+  },
+  "homepage": "https://github.com/deeppaz/qelp#readme"
+}
