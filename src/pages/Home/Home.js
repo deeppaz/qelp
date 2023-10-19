@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const Home = () => {
+export default function Home() {
   return (
-    <div>Home</div>
+    <div style={{color:"black"}}>Hello World</div>
   )
 }
+

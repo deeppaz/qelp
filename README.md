@@ -1,7 +1,7 @@
 
 # Installation
 
-1. Download repo
+1. Clone or Download repo
 2. Install deps
 
    ```js
