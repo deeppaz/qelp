@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { Fragment } from "react";
+import { Box, Heading } from "@chakra-ui/react";
 
-export const Footer = () => {
+export default function Footer() {
   return (
-    <div>Footer</div>
-  )
+    <Fragment>
+      <Heading textAlign={'center'}>  (●'◡'●)</Heading>
+    </Fragment>
+  );
 }
