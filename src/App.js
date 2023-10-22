@@ -5,7 +5,7 @@ import Nav from "./layouts/Nav";
 import Footer from "./layouts/Footer";
 //pages
 import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
+import SavedEmails from "./pages/SavedEmails/SavedEmails";
 import NoMatch from "./pages/NoMatch";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/emails" element={<SavedEmails />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
       <Footer />

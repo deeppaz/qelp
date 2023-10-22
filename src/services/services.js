@@ -1,15 +1,15 @@
 import qelp from "../services/common/http-common";
 
 const generateRandomEmailAddresses = ({count}) => {
-  return qelp.get(`/action=genRandomMailbox&count=${count}`);
+  return qelp.get(`?action=genRandomMailbox&count=${count}`);
 };
 
 const generateListOfActiveDomain = () => {
-    return qelp.get(`/action=getDomainList`);
+    return qelp.get(`action=getDomainList`);
 };
 
 const getMailBox = ({username, domain}) => {
-  return qelp.get(`/action=getMessages&login=${username}&domain=${domain}`);
+  return qelp.get(`?action=getMessages&login=${username}&domain=${domain}`);
 };
 
 const getSingleMessage = ({username, domain, id}) => {

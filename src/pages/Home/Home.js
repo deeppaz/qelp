@@ -1,3 +1,4 @@
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Container,
   VStack,
@@ -8,42 +9,165 @@ import {
   Input,
   Heading,
   Text,
-  Divider
+  Divider,
+  useToast,
 } from "@chakra-ui/react";
-import React, { Fragment } from "react";
+import qelpServices from "../../services/services";
 
 export default function Home() {
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
+  const [generateRandomEmail, setGenerateRandomEmail] = useState(
+    "t29xcqyntz@vjuum.com"
+  );
+  const [currentEmailInfo, setCurrenEmailInfo] = useState([]);
+
+  useEffect(() => {
+    // generateRandomEmails();
+    handleInbox();
+  }, []);
+
+  const generateRandomEmails = () => {
+    qelpServices
+      .generateRandomEmailAddresses({ count: 1 })
+      .then((res) => {
+        setLoading(true);
+        res.data.forEach((element) => {
+          setGenerateRandomEmail(element);
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleInbox = () => {
+    var currentMail = generateRandomEmail.split("@");
+    qelpServices
+      .getMailBox({ username: currentMail[0], domain: currentMail[1] })
+      .then((res) => {
+        setLoading(true);
+        res.data.forEach((element) => {
+          setCurrenEmailInfo(element);
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generateRandomEmail).then(
+      () =>
+        toast({
+          title: "Copied Successfully.",
+          description: generateRandomEmail + " Copied",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        }),
+      (err) => console.error("Could not copy text: ", err)
+    );
+  };
+
+  const saveEmailsToStorage = () => {
+    localStorage.setItem("emails", generateRandomEmail);
+    toast({
+      title: "Saved Successfully.",
+      description:
+        generateRandomEmail + " saved, now you can go to Saved Emails page",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Fragment>
       <VStack>
         <Container maxW="container.xl" h="container.xl">
-          <Box bg="#f1f1f1" w="100%" pt="12" pl="100" pr="100" pb="24" borderRadius="3xl">
+          <Box
+            bg="#f1f1f1"
+            w="100%"
+            pt="12"
+            pl="100"
+            pr="100"
+            pb="24"
+            borderRadius="3xl"
+          >
             <Flex>
               <Box p="4">
                 <Heading size="xl" fontSize="50px" color="#e56e24">
-                Your Email
+                  Your Email
                 </Heading>
               </Box>
               <Spacer />
               <Box p="4">
-                <Button mr="4" color="white" backgroundColor="#e56e24">
-                  {" "}
+                <Button
+                  mr="4"
+                  color="white"
+                  backgroundColor="#e56e24"
+                  onClick={copyToClipboard}
+                >
                   Copy Email
                 </Button>
-                <Button color="white" backgroundColor="#e56e24"> Saved Email</Button>
+                <Button
+                  color="white"
+                  backgroundColor="#e56e24"
+                  onClick={saveEmailsToStorage}
+                >
+                  {" "}
+                  Save Email
+                </Button>
               </Box>
             </Flex>
-            <Input backgroundColor="#d9d9d9" placeholder="Your Email" h="16" borderRadius="3xl"/>
+            {!loading ? (
+              <Input
+                backgroundColor="#d9d9d9"
+                placeholder={generateRandomEmail}
+                h="16"
+                borderRadius="3xl"
+                readOnly
+              />
+            ) : (
+              "..."
+            )}
           </Box>
-          <Box mt="14" bg="#f1f1f1" w="100%" pt="12" pl="100" pr="100" pb="24" borderRadius="3xl">
-            <Heading size="xl" fontSize="50px" color="#e56e24" mb="12" textAlign={"center"}>
+          <Box
+            mt="14"
+            bg="#f1f1f1"
+            w="100%"
+            pt="12"
+            pl="100"
+            pr="100"
+            pb="24"
+            borderRadius="3xl"
+          >
+            <Heading
+              size="xl"
+              fontSize="50px"
+              color="#e56e24"
+              mb="12"
+              textAlign={"center"}
+            >
               Inbox
             </Heading>
-            <Input backgroundColor="#d9d9d9"  h="16" borderRadius="3xl"/>
-
+            {!loading ? (
+              <Input backgroundColor="#d9d9d9" h="16" borderRadius="3xl" />
+            ) : (
+              "..."
+            )}
           </Box>
-          <Divider orientation='horizontal' mt="12" mb="20" />
-          <Heading size="xl" fontSize="50px" color="#e56e24" mb="4"  textAlign={"center"}>
+          <Divider orientation="horizontal" mt="12" mb="20" />
+          <Heading
+            size="xl"
+            fontSize="50px"
+            color="#e56e24"
+            mb="4"
+            textAlign={"center"}
+          >
             About qelp
           </Heading>
           <Text>
