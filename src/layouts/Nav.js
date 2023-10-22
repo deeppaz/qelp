@@ -23,12 +23,12 @@ export default function Nav() {
         }}
       >
         <Box p="5">
-          <Heading size="xl">qelp</Heading>
+          <Heading size="xl" fontSize="50px" color="#e56e24">qelp</Heading>
         </Box>
         <Spacer />
-        <ButtonGroup gap="2">
-          <Button colorScheme="teal" size={"lg"}>Github</Button>
-          <Button colorScheme="teal" size={"lg"}>Saved Emails</Button>
+        <ButtonGroup gap="6">
+          <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">Github</Button>
+          <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">Saved Emails</Button>
         </ButtonGroup>
       </Flex>
     </Fragment>

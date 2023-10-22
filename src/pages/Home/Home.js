@@ -8,6 +8,7 @@ import {
   Input,
   Heading,
   Text,
+  Divider
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
 
@@ -15,28 +16,34 @@ export default function Home() {
   return (
     <Fragment>
       <VStack>
-        <Container maxW="container.xl" h='container.xl'>
-          <Box bg="tomato" w="100%" p="36" color="white">
+        <Container maxW="container.xl" h="container.xl">
+          <Box bg="#f1f1f1" w="100%" pt="12" pl="100" pr="100" pb="24" borderRadius="3xl">
             <Flex>
               <Box p="4">
-                <h1>Your Email</h1>
+                <Heading size="xl" fontSize="50px" color="#e56e24">
+                Your Email
+                </Heading>
               </Box>
               <Spacer />
               <Box p="4">
-                <Button mr="4"> Copy Email</Button>
-                <Button> Saved Email</Button>
+                <Button mr="4" color="white" backgroundColor="#e56e24">
+                  {" "}
+                  Copy Email
+                </Button>
+                <Button color="white" backgroundColor="#e56e24"> Saved Email</Button>
               </Box>
             </Flex>
-            <Input placeholder="Basic usage" />
+            <Input backgroundColor="#d9d9d9" placeholder="Your Email" h="16" borderRadius="3xl"/>
           </Box>
-          <Box mt="14" bg="tomato" w="100%" p="36" color="white">
-            <Heading fontSize="30px" textAlign={"center"}>
+          <Box mt="14" bg="#f1f1f1" w="100%" pt="12" pl="100" pr="100" pb="24" borderRadius="3xl">
+            <Heading size="xl" fontSize="50px" color="#e56e24" mb="12" textAlign={"center"}>
               Inbox
             </Heading>
-            <Input placeholder="Basic usage" />
-          </Box>
+            <Input backgroundColor="#d9d9d9"  h="16" borderRadius="3xl"/>
 
-          <Heading fontSize="30px" textAlign={"center"}>
+          </Box>
+          <Divider orientation='horizontal' mt="12" mb="20" />
+          <Heading size="xl" fontSize="50px" color="#e56e24" mb="4"  textAlign={"center"}>
             About qelp
           </Heading>
           <Text>
