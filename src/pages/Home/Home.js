@@ -130,6 +130,9 @@ export default function Home() {
                 h="16"
                 borderRadius="3xl"
                 readOnly
+                border={"none"}
+                fontSize='3xl'
+                fontWeight='bold'
               />
             ) : (
               "..."
