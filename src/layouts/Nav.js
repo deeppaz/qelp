@@ -35,7 +35,7 @@ export default function Nav() {
           <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">
             <Link to="/">Home</Link>
           </Button>
-          <Tooltip label="Membership Required :(">
+          <Tooltip label="Soon :(">
             <Button size={"lg"} disabled>
             Saved Emails
             </Button>
