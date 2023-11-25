@@ -6,6 +6,7 @@ import {
   Heading,
   ButtonGroup,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -32,15 +33,15 @@ export default function Nav() {
         <Spacer />
         <ButtonGroup gap="6">
           <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">
-            Github
+            <Link to="/">Home</Link>
           </Button>
+          <Tooltip label="Membership Required :(">
+            <Button size={"lg"} disabled>
+            Saved Emails
+            </Button>
+          </Tooltip>
           <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">
-            {location.pathname === "/emails" ? <Link to="/">Home</Link> : ""}
-            {location.pathname === "/" ? (
-              <Link to="/emails">Saved Emails</Link>
-            ) : (
-              ""
-            )}
+            Github
           </Button>
         </ButtonGroup>
       </Flex>

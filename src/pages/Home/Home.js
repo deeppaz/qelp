@@ -28,10 +28,10 @@ export default function Home() {
   }, []);
 
   const generateRandomEmails = () => {
+    setLoading(true);
     qelpServices
       .generateRandomEmailAddresses({ count: 1 })
       .then((res) => {
-        setLoading(true);
         res.data.forEach((element) => {
           setGenerateRandomEmail(element);
         });
