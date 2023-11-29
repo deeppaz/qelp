@@ -13,20 +13,29 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import qelpServices from "../../services/services";
+import Inbox from "../Inbox/Inbox";
 
 export default function Home() {
+  const generatedEmail = localStorage.getItem("generatedEmail");
+  const generatedEmailInfo = localStorage.getItem("generatedEmailInfo");
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const [generateRandomEmail, setGenerateRandomEmail] = useState(
-    "t29xcqyntz@vjuum.com"
-  );
+  const [generateRandomEmail, setGenerateRandomEmail] = useState(generatedEmail);
   const [currentEmailInfo, setCurrenEmailInfo] = useState([]);
 
   useEffect(() => {
-    // generateRandomEmails();
-    handleInbox();
+    if (!generatedEmail) {
+      generateRandomEmails();
+    } else {
+      console.log("email already generated");
+    }
+    if (!generatedEmailInfo) {
+      handleInbox();
+    } else {
+      console.log("email info listed");
+    }
   }, []);
-
+  console.log(currentEmailInfo);
   const generateRandomEmails = () => {
     setLoading(true);
     qelpServices
@@ -34,6 +43,7 @@ export default function Home() {
       .then((res) => {
         res.data.forEach((element) => {
           setGenerateRandomEmail(element);
+          localStorage.setItem("generatedEmail", element);
         });
         setLoading(false);
       })
@@ -50,6 +60,7 @@ export default function Home() {
         setLoading(true);
         res.data.forEach((element) => {
           setCurrenEmailInfo(element);
+          localStorage.setItem("generatedEmailInfo", JSON.stringify(element));
         });
         setLoading(false);
       })
@@ -131,8 +142,10 @@ export default function Home() {
                 borderRadius="3xl"
                 readOnly
                 border={"none"}
-                fontSize='3xl'
-                fontWeight='bold'
+                fontSize="3xl"
+                fontWeight="bold"
+                cursor="pointer"
+                onClick={copyToClipboard}
               />
             ) : (
               "..."
@@ -158,7 +171,11 @@ export default function Home() {
               Inbox
             </Heading>
             {!loading ? (
-              <Input backgroundColor="#d9d9d9" h="16" borderRadius="3xl" />
+              <Inbox
+                inboxInfo={
+                  !currentEmailInfo ? currentEmailInfo : generatedEmailInfo
+                }
+              />
             ) : (
               "..."
             )}
