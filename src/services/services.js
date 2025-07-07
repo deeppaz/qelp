@@ -1,31 +1,18 @@
-import qelp from "../services/common/http-common";
+import { TempMail } from "tempmail.lol";
 
-const generateRandomEmailAddresses = ({count}) => {
-  return qelp.get(`?action=genRandomMailbox&count=${count}`);
+const tempmail = new TempMail("tempmail.20250708.ldbklx01cdtjk82oeat46hlm9b6e6oozsxcrv0swzei8ewee");
+
+const generateRandomEmailAddresses = () => {
+  return tempmail.createInbox();
 };
 
-const generateListOfActiveDomain = () => {
-    return qelp.get(`action=getDomainList`);
-};
-
-const getMailBox = ({username, domain}) => {
-  return qelp.get(`?action=getMessages&login=${username}&domain=${domain}`);
-};
-
-const getSingleMessage = ({username, domain, id}) => {
-  return qelp.get(`/action=readMessage&login=${username}&domain=${domain}&id=${id}`);
-};
-
-const attachmentDownload = ({username, domain, id, file}) => {
-  return qelp.get(`/action=download&login=${username}&domain=${domain}&id=${id}&file=${file}`);
+const getMailBox = (token) => {
+  return tempmail.checkInbox(token);
 };
 
 const services = {
     generateRandomEmailAddresses,
-    generateListOfActiveDomain,
-    getMailBox,
-    getSingleMessage,
-    attachmentDownload
+    getMailBox
 }
 
 export default services

@@ -22,13 +22,25 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [generateRandomEmail, setGenerateRandomEmail] = useState(generatedEmail);
   const [currentEmailInfo, setCurrenEmailInfo] = useState([]);
+  const [allEmails, setAllEmails] = useState(JSON.parse(localStorage.getItem("allEmails") || "[]"));
 
   useEffect(() => {
-    if (!generatedEmail) {
+    const emailCreatedAt = localStorage.getItem("emailCreatedAt");
+    const oneHour = 60 * 60 * 1000;
+    
+    if (emailCreatedAt && Date.now() - parseInt(emailCreatedAt) > oneHour) {
+      localStorage.removeItem("generatedEmail");
+      localStorage.removeItem("emailToken");
+      localStorage.removeItem("allEmails");
+      localStorage.removeItem("generatedEmailInfo");
+      localStorage.removeItem("emailCreatedAt");
+      generateRandomEmails();
+    } else if (!generatedEmail) {
       generateRandomEmails();
     } else {
       console.log("email already generated");
     }
+    
     if (!generatedEmailInfo) {
       handleInbox();
     } else {
@@ -39,37 +51,53 @@ export default function Home() {
   const generateRandomEmails = () => {
     setLoading(true);
     qelpServices
-      .generateRandomEmailAddresses({ count: 1 })
-      .then((res) => {
-        res.data.forEach((element) => {
-          setGenerateRandomEmail(element);
-          localStorage.setItem("generatedEmail", element);
-        });
+      .generateRandomEmailAddresses()
+      .then((inbox) => {
+        setGenerateRandomEmail(inbox.address);
+        localStorage.setItem("generatedEmail", inbox.address);
+        localStorage.setItem("emailToken", inbox.token);
+        localStorage.setItem("emailCreatedAt", Date.now().toString());
         setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
   const handleInbox = () => {
-    var currentMail = generateRandomEmail.split("@");
+    console.log("Refresh button clicked!");
+    const token = localStorage.getItem("emailToken");
+    if (!token) return;
+    setLoading(true);
     qelpServices
-      .getMailBox({ username: currentMail[0], domain: currentMail[1] })
-      .then((res) => {
-        setLoading(true);
-        res.data.forEach((element) => {
-          setCurrenEmailInfo(element);
-          localStorage.setItem("generatedEmailInfo", JSON.stringify(element));
-        });
+      .getMailBox(token)
+      .then((emails) => {
+        if (!emails) {
+          console.log("Email address has expired!");
+          setCurrenEmailInfo([]);
+        } else {
+          // Yeni email'leri mevcut email'lerle birleştir
+          const newEmails = emails.filter(email => 
+            !allEmails.some(existing => existing.date === email.date && existing.from === email.from)
+          );
+          const updatedEmails = [...allEmails, ...newEmails];
+          setAllEmails(updatedEmails);
+          setCurrenEmailInfo(updatedEmails);
+          localStorage.setItem("allEmails", JSON.stringify(updatedEmails));
+          localStorage.setItem("generatedEmailInfo", JSON.stringify(updatedEmails));
+        }
         setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
   const copyToClipboard = () => {
+    console.log("Copy button clicked!", generateRandomEmail);
+    console.log("Copy button clicked!", generateRandomEmail);
     navigator.clipboard.writeText(generateRandomEmail).then(
       () =>
         toast({
@@ -84,6 +112,7 @@ export default function Home() {
   };
 
   const saveEmailsToStorage = () => {
+    console.log("Save button clicked!", generateRandomEmail);
     localStorage.setItem("emails", generateRandomEmail);
     toast({
       title: "Saved Successfully.",
@@ -102,25 +131,29 @@ export default function Home() {
           <Box
             bg="#f1f1f1"
             w="100%"
-            pt="12"
-            pl="100"
-            pr="100"
-            pb="24"
+            pt={["6", "12"]}
+            pl={["4", "8", "100"]}
+            pr={["4", "8", "100"]}
+            pb={["12", "24"]}
             borderRadius="3xl"
           >
-            <Flex>
-              <Box p="4">
-                <Heading size="xl" fontSize="50px" color="#e56e24">
+            <Flex direction={["column", "row"]} align={["center", "flex-start"]}>
+              <Box p="4" textAlign={["center", "left"]}>
+                <Heading size="xl" fontSize={["30px", "40px", "50px"]} color="#e56e24">
                   Your Email
                 </Heading>
               </Box>
               <Spacer />
               <Box p="4">
                 <Button
-                  mr="4"
+                  mr={["0", "4"]}
+                  mb={["2", "0"]}
                   color="white"
                   backgroundColor="#e56e24"
                   onClick={copyToClipboard}
+                  size={["sm", "md"]}
+                  _hover={{ backgroundColor: "#d45a1f", transform: "translateY(-2px)" }}
+                  transition="all 0.2s"
                 >
                   Copy Email
                 </Button>
@@ -128,8 +161,10 @@ export default function Home() {
                   color="white"
                   backgroundColor="#e56e24"
                   onClick={saveEmailsToStorage}
+                  size={["sm", "md"]}
+                  _hover={{ backgroundColor: "#d45a1f", transform: "translateY(-2px)" }}
+                  transition="all 0.2s"
                 >
-                  {" "}
                   Save Email
                 </Button>
               </Box>
@@ -142,7 +177,7 @@ export default function Home() {
                 borderRadius="3xl"
                 readOnly
                 border={"none"}
-                fontSize="3xl"
+                fontSize={["lg", "2xl", "3xl"]}
                 fontWeight="bold"
                 cursor="pointer"
                 onClick={copyToClipboard}
@@ -152,32 +187,44 @@ export default function Home() {
             )}
           </Box>
           <Box
-            mt="14"
+            mt={["8", "14"]}
             bg="#f1f1f1"
             w="100%"
-            pt="12"
-            pl="100"
-            pr="100"
-            pb="24"
+            pt={["6", "12"]}
+            pl={["4", "8", "100"]}
+            pr={["4", "8", "100"]}
+            pb={["12", "24"]}
             borderRadius="3xl"
           >
-            <Heading
-              size="xl"
-              fontSize="50px"
-              color="#e56e24"
-              mb="12"
-              textAlign={"center"}
-            >
-              Inbox
-            </Heading>
+            <Flex mb={["6", "12"]} direction={["column", "row"]} align="center">
+              <Heading
+                size="xl"
+                fontSize={["30px", "40px", "50px"]}
+                color="#e56e24"
+                textAlign="center"
+                flex="1"
+                mb={["4", "0"]}
+              >
+                Inbox
+              </Heading>
+              <Button
+                color="white"
+                backgroundColor="#e56e24"
+                onClick={handleInbox}
+                isLoading={loading}
+                size={["sm", "md"]}
+                _hover={{ backgroundColor: "#d45a1f", transform: "translateY(-2px)" }}
+                transition="all 0.2s"
+              >
+                Refresh
+              </Button>
+            </Flex>
             {!loading ? (
               <Inbox
-                inboxInfo={
-                  !currentEmailInfo ? currentEmailInfo : generatedEmailInfo
-                }
+                inboxInfo={allEmails.length > 0 ? allEmails : JSON.parse(generatedEmailInfo || '[]')}
               />
             ) : (
-              "..."
+              <Text textAlign="center">Loading emails...</Text>
             )}
           </Box>
           <Divider orientation="horizontal" mt="12" mb="20" />

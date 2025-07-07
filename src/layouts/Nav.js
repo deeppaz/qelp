@@ -18,31 +18,45 @@ export default function Nav() {
         minWidth="max-content"
         alignItems="center"
         gap="2"
-        style={{
-          paddingLeft: "80px",
-          paddingRight: "80px",
-          paddingTop: "10px",
-          paddingBottom: "10px",
-        }}
+        px={["4", "8", "20"]}
+        py={["2", "3"]}
+        direction={["column", "row"]}
       >
-        <Box p="5">
-          <Heading size="xl" fontSize="50px" color="#e56e24">
-            qelp
-          </Heading>
+        <Box p={["2", "5"]} mb={["2", "0"]}>
+          <Link to="/">
+            <Heading
+              size="xl"
+              fontSize={["30px", "40px", "50px"]}
+              color="#e56e24"
+            >
+              qelp
+            </Heading>
+          </Link>
         </Box>
         <Spacer />
-        <ButtonGroup gap="6">
-          <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">
-            <Link to="/">Home</Link>
-          </Button>
-          <Tooltip label="Soon :(">
-            <Button size={"lg"} disabled>
-            Saved Emails
+        <ButtonGroup gap={["2", "6"]} flexWrap="wrap">
+          <Link to="/emails">
+            <Button
+              size={["sm", "lg"]}
+              backgroundColor="#e56e24"
+              color="white"
+              _hover={{ backgroundColor: "#d45a1f", transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              Saved Emails
             </Button>
-          </Tooltip>
-          <Button colorScheme="teal" size={"lg"} backgroundColor="#e56e24">
-            Github
-          </Button>
+          </Link>
+          <Link to="https://github.com/deeppaz/qelp">
+            <Button
+              size={["sm", "lg"]}
+              backgroundColor="#e56e24"
+              color="white"
+              _hover={{ backgroundColor: "#d45a1f", transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              GitHub
+            </Button>
+          </Link>
         </ButtonGroup>
       </Flex>
     </Fragment>

@@ -1,10 +1,9 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://cors-anywhere.herokuapp.com/https://www.1secmail.com/api/v1/",
+  baseURL: "https://api.tempmail.lol/v2/",
   headers: {
     "Content-type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    "Authorization": "Bearer tempmail.20250708.ldbklx01cdtjk82oeat46hlm9b6e6oozsxcrv0swzei8ewee",
   },
 });

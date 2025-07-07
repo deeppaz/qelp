@@ -14,7 +14,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/emails" element={<SavedEmails />} /> */}
+        <Route path="/emails" element={<SavedEmails />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
       <Footer />
